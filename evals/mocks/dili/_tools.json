@@ -1,0 +1,884 @@
+{
+  "tools": [
+    {
+      "name": "search",
+      "title": "Search listings",
+      "description": "Search active listings on dili in one section. Returns up to 10 listings per page with code, url, price and key facts, plus the total and a price summary. Names of cities, neighborhoods and car makes may be in the language given in lang or in Hebrew. Filters that do not belong to the chosen section are ignored.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "lang": {
+            "type": "string",
+            "enum": [
+              "he",
+              "en",
+              "ru",
+              "fr"
+            ],
+            "description": "Language of the results: the language of the conversation. Default he (Hebrew)."
+          },
+          "section": {
+            "type": "string",
+            "enum": [
+              "realestate",
+              "cars",
+              "market"
+            ],
+            "description": "Board section: realestate, cars, or market (second-hand goods)."
+          },
+          "city": {
+            "type": "string",
+            "description": "City, e.g. \"בני ברק\", \"Bnei Brak\", \"Бней-Брак\"."
+          },
+          "min_price": {
+            "type": "number",
+            "description": "ILS."
+          },
+          "max_price": {
+            "type": "number",
+            "description": "ILS."
+          },
+          "sort": {
+            "type": "string",
+            "enum": [
+              "price_asc",
+              "price_desc",
+              "year"
+            ],
+            "description": "Default: newest first. \"year\" is for cars."
+          },
+          "verified_only": {
+            "type": "boolean",
+            "description": "Only listings recently confirmed by the owner."
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "deal": {
+            "type": "string",
+            "enum": [
+              "rent",
+              "sale",
+              "vacation"
+            ],
+            "description": "realestate."
+          },
+          "property_types": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "apartment",
+                "house",
+                "room",
+                "penthouse",
+                "garden_apartment",
+                "duplex",
+                "unit"
+              ]
+            },
+            "description": "realestate."
+          },
+          "neighborhood": {
+            "type": "string",
+            "description": "realestate."
+          },
+          "min_rooms": {
+            "type": "number"
+          },
+          "max_rooms": {
+            "type": "number"
+          },
+          "min_square_meters": {
+            "type": "number"
+          },
+          "max_floor": {
+            "type": "number"
+          },
+          "features": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "elevator",
+                "parking",
+                "mamad",
+                "balcony",
+                "shabbat_elevator"
+              ]
+            },
+            "description": "realestate. All listed features are required."
+          },
+          "sublet": {
+            "type": "boolean",
+            "description": "realestate. Short-term sublets only."
+          },
+          "area_character": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "haredi",
+                "dati",
+                "mixed",
+                "secular"
+              ]
+            },
+            "description": "realestate. Character of the statistical area around the listing (by the share of Haredi and state-religious kindergartens). Any of the listed values."
+          },
+          "area_age": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "kids",
+                "mixed",
+                "seniors"
+              ]
+            },
+            "description": "realestate. Residents of the area: many children, mixed, many seniors (CBS demography)."
+          },
+          "area_living_standard": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "low",
+                "mid",
+                "high"
+              ]
+            },
+            "description": "realestate. CBS socio-economic cluster of the area: 1-4, 5-7, 8-10."
+          },
+          "area_density": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "low",
+                "mid",
+                "high"
+              ]
+            },
+            "description": "realestate. Residents per square km of the area."
+          },
+          "with_price": {
+            "type": "boolean",
+            "description": "realestate. Skip listings without a price."
+          },
+          "query": {
+            "type": "string",
+            "description": "cars and market. Free text; Hebrew matches best, e.g. \"טויוטה קורולה 2018\" or \"ספה פינתית\"."
+          },
+          "make": {
+            "type": "string",
+            "description": "cars. Make, e.g. \"טויוטה\" or \"Toyota\" (see car_catalog)."
+          },
+          "model": {
+            "type": "string",
+            "description": "cars."
+          },
+          "body": {
+            "type": "string",
+            "description": "cars. Body type as returned by car_catalog, e.g. \"SUV\", \"משפחתי\"."
+          },
+          "gear": {
+            "type": "string",
+            "enum": [
+              "auto",
+              "manual"
+            ],
+            "description": "cars."
+          },
+          "fuel": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "petrol",
+                "hybrid",
+                "electric",
+                "diesel"
+              ]
+            },
+            "description": "cars."
+          },
+          "min_year": {
+            "type": "number"
+          },
+          "max_km": {
+            "type": "number"
+          },
+          "max_hand": {
+            "type": "number",
+            "description": "cars. Maximum number of previous owners (\"יד\")."
+          },
+          "min_seats": {
+            "type": "number"
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "furniture",
+              "phones",
+              "electronics",
+              "home",
+              "housewares",
+              "baby",
+              "toys",
+              "gaming",
+              "sports",
+              "tools",
+              "music",
+              "fashion",
+              "judaica",
+              "pets",
+              "other"
+            ],
+            "description": "market."
+          },
+          "condition": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "new",
+                "likenew",
+                "good",
+                "used"
+              ]
+            },
+            "description": "market."
+          },
+          "delivery": {
+            "type": "boolean",
+            "description": "market. Seller offers delivery."
+          }
+        },
+        "required": [
+          "section"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_listing",
+      "title": "Listing details",
+      "description": "Full details of one listing by its code: facts, price and how it compares to the area or model, location as the owner chose to show it, description, ways to contact the owner on dili, and similar listings.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "lang": {
+            "type": "string",
+            "enum": [
+              "he",
+              "en",
+              "ru",
+              "fr"
+            ],
+            "description": "Language of the results: the language of the conversation. Default he (Hebrew)."
+          },
+          "section": {
+            "type": "string",
+            "enum": [
+              "realestate",
+              "cars",
+              "market"
+            ],
+            "description": "Board section: realestate, cars, or market (second-hand goods)."
+          },
+          "code": {
+            "type": "integer",
+            "description": "Listing code from search results or from a dili.co.il link."
+          }
+        },
+        "required": [
+          "section",
+          "code"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "compare_listings",
+      "title": "Compare listings",
+      "description": "Comparison table for 2 to 4 listings from the same section, with the best value marked in each row. Real estate rows include price per square meter, features, street deal prices, transport, schools and shelters.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "lang": {
+            "type": "string",
+            "enum": [
+              "he",
+              "en",
+              "ru",
+              "fr"
+            ],
+            "description": "Language of the results: the language of the conversation. Default he (Hebrew)."
+          },
+          "section": {
+            "type": "string",
+            "enum": [
+              "realestate",
+              "cars",
+              "market"
+            ],
+            "description": "Board section: realestate, cars, or market (second-hand goods)."
+          },
+          "codes": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "minItems": 2,
+            "maxItems": 4
+          }
+        },
+        "required": [
+          "section",
+          "codes"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "address_info",
+      "title": "Address and street data",
+      "description": "Public data about an Israeli street address: recorded sale deals on the street and in the building, median price per square meter, city price trend, area population and socio-economic cluster, schools, public transport, shelters, building plans and urban renewal projects. Sources: Israel Tax Authority, CBS, ministries.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "lang": {
+            "type": "string",
+            "enum": [
+              "he",
+              "en",
+              "ru",
+              "fr"
+            ],
+            "description": "Language of the results: the language of the conversation. Default he (Hebrew)."
+          },
+          "address": {
+            "type": "string",
+            "description": "Street and house number, e.g. \"רבי עקיבא 10\" or \"Rabbi Akiva 10\"."
+          },
+          "city": {
+            "type": "string",
+            "description": "City."
+          }
+        },
+        "required": [
+          "address"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "car_catalog",
+      "title": "Car makes and models in Israel",
+      "description": "Israeli vehicle registry data. Without arguments: makes with the number of models and cars on the road. With `make`: its models with years, cars on the road, price range when new (ILS), body type, seats, horsepower and safety level.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "lang": {
+            "type": "string",
+            "enum": [
+              "he",
+              "en",
+              "ru",
+              "fr"
+            ],
+            "description": "Language of the results: the language of the conversation. Default he (Hebrew)."
+          },
+          "make": {
+            "type": "string",
+            "description": "Make as returned by this tool without arguments (`make` or `name`)."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "car_price",
+      "title": "Used car price guide",
+      "description": "Expected asking price of a used car in Israel by model, year, mileage and number of owners (\"hand\"), calculated daily from dili listings and importers' new-car prices. With `make` and `model`: expected price for every production year (low–mid–high, typical mileage, price when new and the share of it that remains); add `year` (and `km`, `hand`) for one car. Without arguments: common models with expected prices, how much each make keeps of its new price after 5 years, and the month-to-month change. Asking prices, not sale prices; not an official price list.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "lang": {
+            "type": "string",
+            "enum": [
+              "he",
+              "en",
+              "ru",
+              "fr"
+            ],
+            "description": "Language of the results: the language of the conversation. Default he (Hebrew)."
+          },
+          "make": {
+            "type": "string",
+            "description": "Make, e.g. \"טויוטה\" or \"Toyota\" (see car_catalog)."
+          },
+          "model": {
+            "type": "string",
+            "description": "Model, e.g. \"קורולה\" or \"Corolla\"."
+          },
+          "year": {
+            "type": "number",
+            "description": "Production year."
+          },
+          "km": {
+            "type": "number",
+            "description": "Mileage in km. Omitted: typical for the age."
+          },
+          "hand": {
+            "type": "number",
+            "description": "Number of owners so far (1 = first hand). Omitted: typical for the age."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "car_by_plate",
+      "title": "Car by licence plate",
+      "description": "Look up a car in the Israeli Ministry of Transport registry by licence plate: make, model, year, trim, fuel, ownership type, test validity, mileage at last test and more. Private and light commercial vehicles from 1996.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "lang": {
+            "type": "string",
+            "enum": [
+              "he",
+              "en",
+              "ru",
+              "fr"
+            ],
+            "description": "Language of the results: the language of the conversation. Default he (Hebrew)."
+          },
+          "plate": {
+            "type": "string",
+            "description": "7 or 8 digits, dashes allowed."
+          }
+        },
+        "required": [
+          "plate"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "area_report",
+      "title": "City or neighborhood report",
+      "description": "Housing market of an Israeli city (optionally a neighborhood): recorded sale deals, median price per square meter by year, typical prices by number of rooms, most active streets, yearly growth and rental yield, plus what is listed on dili now for rent and for sale.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "lang": {
+            "type": "string",
+            "enum": [
+              "he",
+              "en",
+              "ru",
+              "fr"
+            ],
+            "description": "Language of the results: the language of the conversation. Default he (Hebrew)."
+          },
+          "city": {
+            "type": "string",
+            "description": "City, e.g. \"בני ברק\" or \"Bnei Brak\"."
+          },
+          "neighborhood": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "city"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "price_estimate",
+      "title": "Apartment price estimate",
+      "description": "Estimate the sale value of an apartment from recorded deals on its street and in its city: estimate with a low–high range, price per square meter, what it is based on, deals in the same building. Not an appraisal.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "lang": {
+            "type": "string",
+            "enum": [
+              "he",
+              "en",
+              "ru",
+              "fr"
+            ],
+            "description": "Language of the results: the language of the conversation. Default he (Hebrew)."
+          },
+          "city": {
+            "type": "string"
+          },
+          "street": {
+            "type": "string",
+            "description": "Street name, e.g. \"רבי עקיבא\" or \"Rabbi Akiva\"."
+          },
+          "house": {
+            "type": "string",
+            "description": "House number, optional."
+          },
+          "rooms": {
+            "type": "number"
+          },
+          "square_meters": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "city",
+          "street"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "places",
+      "title": "Find a city or neighborhood",
+      "description": "Look up cities and neighborhoods known to dili by part of the name in any supported language. Use it when a place name is ambiguous or search returned `not_recognised`.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "lang": {
+            "type": "string",
+            "enum": [
+              "he",
+              "en",
+              "ru",
+              "fr"
+            ],
+            "description": "Language of the results: the language of the conversation. Default he (Hebrew)."
+          },
+          "query": {
+            "type": "string",
+            "description": "Part of the name, e.g. \"Ramat\", \"Рамат\", \"רמת\"."
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "city",
+              "neighborhood"
+            ]
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_guide",
+      "title": "How to help with a task",
+      "description": "Step-by-step guidance for a common task with dili tools. Call it once at the start of such a task. Topics: find-home (Rent or buy: from needs to a shortlist with area context.); find-car (From how the car will be used to models and listings.); find-item (Search goods by words, category and condition.); area-analysis (Prices, deals and what is for sale or rent now.); fair-price (Check an asking price against deals and similar listings.); car-check (What the registry says about a car by its plate.); compare (Choose between 2–4 listings.); post-listing (How a person publishes their own apartment, car or item.).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "topic": {
+            "type": "string",
+            "enum": [
+              "find-home",
+              "find-car",
+              "find-item",
+              "area-analysis",
+              "fair-price",
+              "car-check",
+              "compare",
+              "post-listing"
+            ]
+          }
+        },
+        "required": [
+          "topic"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "my_overview",
+      "title": "My dili account",
+      "description": "The signed-in person’s dili account at a glance: unread messages, what needs attention, their listings and saved searches. Requires sign-in.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "lang": {
+            "type": "string",
+            "enum": [
+              "he",
+              "en",
+              "ru",
+              "fr"
+            ],
+            "description": "Language of the results: the language of the conversation. Default he (Hebrew)."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "my_listings",
+      "title": "My listings",
+      "description": "Listings the signed-in person has posted on dili, with status, views and other numbers, and pending price offers. Requires sign-in.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "lang": {
+            "type": "string",
+            "enum": [
+              "he",
+              "en",
+              "ru",
+              "fr"
+            ],
+            "description": "Language of the results: the language of the conversation. Default he (Hebrew)."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "my_saved_searches",
+      "title": "My saved searches",
+      "description": "Searches the signed-in person saved on dili and whether new listings appeared for them. Requires sign-in.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "lang": {
+            "type": "string",
+            "enum": [
+              "he",
+              "en",
+              "ru",
+              "fr"
+            ],
+            "description": "Language of the results: the language of the conversation. Default he (Hebrew)."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "my_favorites",
+      "title": "My saved listings",
+      "description": "Listings the signed-in person saved (hearts) and recently viewed on dili. Requires sign-in.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "lang": {
+            "type": "string",
+            "enum": [
+              "he",
+              "en",
+              "ru",
+              "fr"
+            ],
+            "description": "Language of the results: the language of the conversation. Default he (Hebrew)."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "my_inbox",
+      "title": "My messages",
+      "description": "Conversations of the signed-in person with owners and buyers on dili. Without arguments: the list of threads. With `thread_id`: the messages of one thread (this marks it as read). Requires sign-in.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "lang": {
+            "type": "string",
+            "enum": [
+              "he",
+              "en",
+              "ru",
+              "fr"
+            ],
+            "description": "Language of the results: the language of the conversation. Default he (Hebrew)."
+          },
+          "thread_id": {
+            "type": "string",
+            "description": "Thread id from the list."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    }
+  ]
+}

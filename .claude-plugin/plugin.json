@@ -1,0 +1,28 @@
+{
+  "name": "dili",
+  "displayName": "dili: Israeli classifieds",
+  "version": "0.1.1",
+  "description": "Search apartments, cars and second-hand goods in Israel on dili: listings with prices and links, recorded real-estate deals, city and neighborhood reports, a used-car price guide and a licence plate check. Hebrew, English, Russian and French.",
+  "author": {
+    "name": "dili",
+    "url": "https://dili.co.il"
+  },
+  "homepage": "https://dili.co.il/mcp",
+  "repository": "https://github.com/yadidish/dili-plugin",
+  "license": "MIT",
+  "keywords": [
+    "israel",
+    "real-estate",
+    "apartments",
+    "rent",
+    "cars",
+    "second-hand",
+    "classifieds",
+    "hebrew"
+  ],
+  "documentationUrl": "https://dili.co.il/mcp",
+  "supportUrl": "https://dili.co.il/contact",
+  "privacyPolicyUrl": "https://dili.co.il/privacy",
+  "termsOfServiceUrl": "https://dili.co.il/terms",
+  "icon": "./assets/icon.png"
+}

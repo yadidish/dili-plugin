@@ -1,0 +1,15 @@
+{
+  "name": "dili",
+  "description": "dili, the Israeli classifieds board, for AI assistants",
+  "owner": {
+    "name": "dili",
+    "url": "https://dili.co.il"
+  },
+  "plugins": [
+    {
+      "name": "dili",
+      "source": "./",
+      "description": "Search apartments, cars and second-hand goods in Israel on dili, with prices, deals and area data."
+    }
+  ]
+}

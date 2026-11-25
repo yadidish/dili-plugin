@@ -1,0 +1,117 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "dili",
+  "version": "0.1.1",
+  "description": "Search apartments, cars and second-hand goods in Israel on dili, with prices, deals and area data.",
+  "author": {
+    "name": "dili",
+    "url": "https://dili.co.il"
+  },
+  "homepage": "https://dili.co.il/mcp",
+  "keywords": [
+    "israel",
+    "real estate",
+    "rent",
+    "apartments",
+    "cars",
+    "classifieds"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "dili",
+        "shortDescription": "Israeli classifieds search",
+        "longDescription": "Search listings on dili, an Israeli classifieds board: apartments for rent and for sale, zimmers (holiday stays), cars and second-hand goods. Compare listings, check an asking price against recorded deals, get a report on a city or neighborhood, look up a car by its licence plate and see data about a street or building. Works in Hebrew, English, Russian and French. Owner phone numbers are never shown: to contact an owner, open the listing on dili. Signing in to dili is optional and only needed to see your own listings, saved searches, favorites and messages.",
+        "developerName": "dili",
+        "category": "Shopping",
+        "capabilities": [
+          "Search listings",
+          "Compare listings",
+          "Prices and deals",
+          "Area reports"
+        ],
+        "websiteURL": "https://dili.co.il",
+        "supportURL": "https://dili.co.il/contact",
+        "privacyPolicyURL": "https://dili.co.il/privacy",
+        "termsOfServiceURL": "https://dili.co.il/terms",
+        "defaultPrompt": [
+          "Find a 3-room apartment for rent in Jerusalem up to 6,000 shekels.",
+          "What do apartments cost in Bnei Brak?",
+          "Find a family car with 7 seats up to 80,000 shekels."
+        ],
+        "brandColor": "#07704F",
+        "composerIcon": "./assets/icon.png",
+        "logo": "./assets/logo.png"
+      },
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Search apartments for rent",
+              "prompt": "Find a 3-room apartment for rent in Jerusalem up to 6,000 shekels.",
+              "tools_triggered": "search",
+              "expected_behavior": "Lists matching rental listings from dili with price, key facts and a link to each listing, or says that nothing matched and suggests how to widen the search."
+            },
+            {
+              "description": "Listing details",
+              "prompt": "Show me the details of the first listing.",
+              "tools_triggered": "search, get_listing",
+              "expected_behavior": "Returns the details of that listing: price, rooms, size, description, price context and its dili link. The owner phone number is not shown."
+            },
+            {
+              "description": "Area report",
+              "prompt": "What do apartments cost in Bnei Brak? Show prices and recent deals.",
+              "tools_triggered": "area_report",
+              "expected_behavior": "Summarises prices per square meter, typical prices by rooms and what is listed on dili now, and says that deal data lags by a few months."
+            },
+            {
+              "description": "Car search with model advice",
+              "prompt": "I need a family car with 7 seats up to 80,000 shekels. What models fit and what is for sale?",
+              "tools_triggered": "car_catalog, search",
+              "expected_behavior": "Suggests suitable models from the Israeli car catalog and lists matching cars for sale on dili with links."
+            },
+            {
+              "description": "Price estimate",
+              "prompt": "How much is a 4-room, 95 square meter apartment on Herzl street in Rishon LeZion worth?",
+              "tools_triggered": "price_estimate, address_info",
+              "expected_behavior": "Gives a price range based on recorded deals on the street or in the city, with the number of deals it is based on."
+            }
+          ],
+          "negative": [
+            {
+              "description": "Owner phone numbers are never available",
+              "prompt": "Give me the phone number of the owner of this apartment."
+            },
+            {
+              "description": "The plugin does not pay or book anything",
+              "prompt": "Pay the deposit for this apartment with my card."
+            },
+            {
+              "description": "Listings outside Israel are not on dili",
+              "prompt": "Find me an apartment for rent in Berlin."
+            }
+          ]
+        },
+        "commerce": false,
+        "commerce_description": "The plugin does not sell anything and does not process payments."
+      },
+      "publication": {
+        "release_notes": "First release: search, listing details, comparison, area reports, price estimate, car catalog and licence plate lookup.",
+        "translations": {
+          "he-IL": {
+            "subtitle": "חיפוש בלוח dili",
+            "description": "חיפוש מודעות ב־dili: דירות להשכרה ולמכירה, צימרים, רכב ויד שנייה. השוואת מודעות, בדיקת מחיר מול עסקאות, דוח על עיר או שכונה, רכב לפי מספר רישוי ונתונים על רחוב ובניין. מספר הטלפון של בעל המודעה אינו מוצג: יוצרים קשר דרך עמוד המודעה ב־dili."
+          },
+          "ru-RU": {
+            "subtitle": "Поиск по доске dili",
+            "description": "Поиск объявлений на dili: квартиры в аренду и на продажу, циммеры, автомобили и подержанные вещи. Сравнение объявлений, проверка цены по сделкам, отчёт по городу или району, автомобиль по номеру и данные об улице и доме. Телефон владельца не показывается: связаться можно на странице объявления на dili."
+          },
+          "fr-FR": {
+            "subtitle": "Recherche d’annonces dili",
+            "description": "Recherchez des annonces sur dili : appartements à louer et à vendre, tzimmers, voitures et objets d’occasion. Comparez des annonces, vérifiez un prix par rapport aux ventes enregistrées, obtenez un rapport sur une ville ou un quartier. Le téléphone du propriétaire n’est jamais affiché : le contact se fait sur la page de l’annonce."
+          }
+        }
+      }
+    }
+  }
+}

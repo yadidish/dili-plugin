@@ -1,0 +1,1 @@
+{"places":[{"kind":"city","name":"Bnei Brak","hebrew":"בני ברק"}],"hint":"Pass `name` or `hebrew` as city or neighborhood in other tools."}

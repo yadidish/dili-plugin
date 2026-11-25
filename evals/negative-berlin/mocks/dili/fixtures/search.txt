@@ -1,0 +1,1 @@
+{"section":"realestate","total":0,"page":1,"page_size":10,"has_more":false,"not_recognised":{"names":["Berlin"],"hint":"These names were not recognised and were used as written. Use the spelling from earlier results or the Hebrew name."}}
